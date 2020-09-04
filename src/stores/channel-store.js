@@ -13,7 +13,7 @@ class ChannelStore {
         }
         try {
             const channel_response = await API.get('/all.json')
-            this.channels = channel_response?.response
+            this.channels = channel_response?.data?.response
         } catch (err) {
             this.has_error = true
         }
@@ -21,8 +21,25 @@ class ChannelStore {
         this.is_loading = false
     }
 
+    getChannelsByFilters = (filters) => {
+        const current_channels = [...this.channels]
+
+        filters.forEach((filter) => {
+            current_channels.filter((channel) => {
+                return (
+                    channel.category === filter ||
+                    channel.language === filter ||
+                    (channel.isHd && filter === 'hd') ||
+                    (!channel.isHd && filter === 'sd')
+                )
+            })
+        })
+
+        return current_channels
+    }
+
     get has_loaded() {
-        return this.channels.length > 0
+        return this.channels?.length > 0
     }
 }
 
