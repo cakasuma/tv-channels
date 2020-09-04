@@ -7,7 +7,7 @@ export const Text = styled(({ as = 'p', children, ...props }) =>
     createElement(as, props, children),
 )`
     ${(props) => {
-        if (props.as?.startWith('h')) {
+        if (props.as?.startsWith('h')) {
             return css`
                 font-weight: bold;
             `
