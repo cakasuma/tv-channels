@@ -10,7 +10,6 @@ import { Text } from 'components/typography'
 import { Button } from 'components/button'
 import { Input } from 'components/input'
 import { filter_constants } from 'utils/constants'
-import { Switch } from 'components/switch'
 import Search from './_search'
 import Filters from './_filters'
 import Card from './_card'
@@ -101,8 +100,8 @@ const Channels = observer(() => {
         })
         const sort_channels =
             sort === 'stbNumber'
-                ? search_channels.sort((a, b) => +a[sort].localeCompare(+b[sort]))
-                : search_channels.sort((a, b) => a[sort].localeCompare(b[sort]))
+                ? search_channels.sort((a, b) => +a[sort]?.localeCompare(+b[sort]))
+                : search_channels.sort((a, b) => a[sort]?.localeCompare(b[sort]))
         return sort_channels
     }
 

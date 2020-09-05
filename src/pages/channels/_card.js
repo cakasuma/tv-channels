@@ -121,7 +121,7 @@ const Card = ({ image, channel_id, channel_name, channel_number, today_schedule 
             ) : (
                 <Text as="h5">No information available</Text>
             )}
-            <CardButton to={`/channel/${channel_id}`} secondary>
+            <CardButton to={`/channel/${channel_id}`} secondary="true">
                 View details
             </CardButton>
         </StyledCard>

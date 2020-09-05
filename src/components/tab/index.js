@@ -56,15 +56,6 @@ const TabList = styled.div`
     }
 `
 
-const LineDivider = styled.div`
-    bottom: 0;
-    position: absolute;
-    height: 2px;
-    width: 100%;
-    background: ${({ theme }) => theme.divider};
-    z-index: 1;
-`
-
 const Content = styled.div`
     flex: 1;
     width: 100%;
@@ -79,6 +70,10 @@ const Flex = styled.div`
     align-items: center;
 `
 
+const WhiteText = styled(Text)`
+    color: ${({ theme }) => theme.color_primary};
+`
+
 const TabPanel = ({ children }) => (
     <TabContent role="tabpanel" tabindex="0">
         {children}
@@ -89,14 +84,14 @@ TabPanel.propTypes = {
     children: PropTypes.node,
 }
 
-const Tabs = ({ children, tab_break }) => {
+const Tabs = ({ children, tab_break, className }) => {
     const [selected_tab, setSelectedTab] = React.useState(0)
     const selectTab = (tabIndex) => {
         setSelectedTab(tabIndex)
     }
 
     return (
-        <Flex>
+        <Flex className={className}>
             <TabList breakPoint={tab_break} role="tablist">
                 {React.Children.map(children, ({ props: { label } }, index) => (
                     <TabButton
@@ -105,12 +100,16 @@ const Tabs = ({ children, tab_break }) => {
                         aria-selected={selected_tab === index ? 'true' : 'false'}
                         onClick={() => selectTab(index)}
                     >
-                        <Text align="center" size="var(--text-size-m)" color="red-2" weight="bold">
+                        <WhiteText
+                            align="center"
+                            size="var(--text-size-m)"
+                            color="red-2"
+                            weight="bold"
+                        >
                             {label}
-                        </Text>
+                        </WhiteText>
                     </TabButton>
                 ))}
-                <LineDivider />
             </TabList>
 
             <Content>
