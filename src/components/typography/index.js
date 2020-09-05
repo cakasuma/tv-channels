@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 const createElement = React.createElement
@@ -28,4 +29,16 @@ export const Text = styled(({ as = 'p', size = 'm', children, ...props }) =>
         return '16px'
     }};
     line-height: 1.5;
+`
+
+export const LinkText = styled(Link)`
+    font-size: 16px;
+    line-height: 1.5;
+    text-decoration: none;
+    color: ${({ theme }) => theme.color_secondary};
+
+    &:hover {
+        text-decoration: underline;
+        text-decoration-color: ${({ theme }) => theme.color_secondary};
+    }
 `

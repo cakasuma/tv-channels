@@ -13,6 +13,7 @@ import { filter_constants } from 'utils/constants'
 import Search from './_search'
 import Filters from './_filters'
 import Card from './_card'
+import Pagination from './_pagination'
 
 const pushToQueryParams = (filters, search) => {
     let current_query = ['?filter=']
@@ -145,19 +146,23 @@ const Channels = observer(() => {
             </SectionContainer>
             <ChannelSectionContainer>
                 <Container>
-                    <MainGrid>
-                        {filtered_channels.map((ch_item, index) => (
-                            <Card
-                                key={index}
-                                channel_id={ch_item.id}
-                                channel_name={ch_item.title}
-                                channel_number={ch_item.stbNumber}
-                                today_schedule={ch_item.currentSchedule}
-                                image={ch_item.imageUrl}
-                                is_hd={ch_item.isHd}
-                            />
-                        ))}
-                    </MainGrid>
+                    {filtered_channels.length ? (
+                        <Pagination page_limit={9}>
+                            {filtered_channels.map((ch_item, index) => (
+                                <Card
+                                    key={index}
+                                    channel_id={ch_item.id}
+                                    channel_name={ch_item.title}
+                                    channel_number={ch_item.stbNumber}
+                                    today_schedule={ch_item.currentSchedule}
+                                    image={ch_item.imageUrl}
+                                    is_hd={ch_item.isHd}
+                                />
+                            ))}
+                        </Pagination>
+                    ) : (
+                        <Text as="h4">No results found</Text>
+                    )}
                 </Container>
             </ChannelSectionContainer>
         </>
@@ -229,12 +234,6 @@ const FilterPopup = styled(Popup)`
     &-content {
         animation: ${popupAnimation} 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
     }
-`
-
-const MainGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 16px;
 `
 
 export default Channels
