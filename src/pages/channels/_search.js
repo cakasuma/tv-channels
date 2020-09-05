@@ -7,6 +7,8 @@ const WithReset = styled(Input)`
     &:focus ~ svg,
     &:active ~ svg {
         opacity: 1;
+        cursor: pointer;
+        pointer-events: auto;
     }
 `
 
@@ -24,7 +26,8 @@ const Reset = styled(XCircle)`
     margin-left: -45px;
     margin-right: 25px;
     fill: ${({ theme }) => theme.color_secondary};
-    cursor: pointer;
+    cursor: text;
+    pointer-events: none;
 `
 
 const Search = ({ search, setSearch }) => {
