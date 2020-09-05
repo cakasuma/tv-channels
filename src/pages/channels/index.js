@@ -3,13 +3,14 @@ import styled, { keyframes } from 'styled-components'
 import Popup from 'reactjs-popup'
 import matchSorter from 'match-sorter'
 import { observer } from 'mobx-react'
-import { Filter } from '@styled-icons/bootstrap'
+import { Filter, Toggles } from '@styled-icons/bootstrap'
 import { useStores } from 'stores'
 import { Container } from 'components/container'
 import { Text } from 'components/typography'
 import { Button } from 'components/button'
 import { Input } from 'components/input'
 import { filter_constants } from 'utils/constants'
+import { Switch } from 'components/switch'
 import Search from './_search'
 import Filters from './_filters'
 import Card from './_card'
@@ -91,17 +92,23 @@ const initializeSearch = () => {
 const Channels = observer(() => {
     const { channel } = useStores()
 
-    const filterChannel = (filters, search) => {
+    const filterChannel = (filters, search, sort) => {
         const filter_channels = channel.getChannelsByFilters(filters)
+
         const search_channels = matchSorter(filter_channels, search.trim(), {
             keys: ['title', 'stbNumber'],
             threshold: matchSorter.rankings.WORD_STARTS_WITH,
         })
-        return search_channels
+        const sort_channels =
+            sort === 'stbNumber'
+                ? search_channels.sort((a, b) => +a[sort].localeCompare(+b[sort]))
+                : search_channels.sort((a, b) => a[sort].localeCompare(b[sort]))
+        return sort_channels
     }
 
     const [filters, setFilters] = React.useState(initializeFilters())
     const [search, setSearch] = React.useState(initializeSearch)
+    const [sort, setSort] = React.useState('title')
     const [filtered_channels, setFilteredChannel] = React.useState(() =>
         filterChannel(filters, search),
     )
@@ -114,10 +121,10 @@ const Channels = observer(() => {
     React.useEffect(() => {
         debouncedUpdateQueryParams(filters, search)
 
-        const filtered = filterChannel(filters, search)
+        const filtered = filterChannel(filters, search, sort)
         setFilteredChannel(filtered)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, filters, channel.channels])
+    }, [search, filters, sort, channel.channels])
 
     return (
         <>
@@ -147,19 +154,33 @@ const Channels = observer(() => {
             <ChannelSectionContainer>
                 <Container>
                     {filtered_channels.length ? (
-                        <Pagination page_limit={9}>
-                            {filtered_channels.map((ch_item, index) => (
-                                <Card
-                                    key={index}
-                                    channel_id={ch_item.id}
-                                    channel_name={ch_item.title}
-                                    channel_number={ch_item.stbNumber}
-                                    today_schedule={ch_item.currentSchedule}
-                                    image={ch_item.imageUrl}
-                                    is_hd={ch_item.isHd}
-                                />
-                            ))}
-                        </Pagination>
+                        <>
+                            <ToggleContainer>
+                                <SText selected={sort === 'title'} onClick={() => setSort('title')}>
+                                    Sort title
+                                </SText>
+                                <SToggle />
+                                <SText
+                                    selected={sort === 'stbNumber'}
+                                    onClick={() => setSort('stbNumber')}
+                                >
+                                    Sort number
+                                </SText>
+                            </ToggleContainer>
+                            <Pagination page_limit={9}>
+                                {filtered_channels.map((ch_item, index) => (
+                                    <Card
+                                        key={index}
+                                        channel_id={ch_item.id}
+                                        channel_name={ch_item.title}
+                                        channel_number={ch_item.stbNumber}
+                                        today_schedule={ch_item.currentSchedule}
+                                        image={ch_item.imageUrl}
+                                        is_hd={ch_item.isHd}
+                                    />
+                                ))}
+                            </Pagination>
+                        </>
                     ) : (
                         <Text as="h4">No results found</Text>
                     )}
@@ -234,6 +255,29 @@ const FilterPopup = styled(Popup)`
     &-content {
         animation: ${popupAnimation} 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
     }
+`
+
+const ToggleContainer = styled.div`
+    cursor: pointer;
+    background: ${({ theme }) => theme.color_secondary};
+    padding: 10px 16px;
+    border-radius: 18px;
+    width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${({ theme }) => theme.color_white};
+`
+
+const SToggle = styled(Toggles)`
+    width: 16px;
+    height: 16px;
+    margin: 0 8px;
+`
+
+const SText = styled(Text)`
+    opacity: ${(props) => (props.selected ? 1 : 0.6)};
 `
 
 export default Channels

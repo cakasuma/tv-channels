@@ -9,6 +9,7 @@ const WithReset = styled(Input)`
         opacity: 1;
         cursor: pointer;
         pointer-events: auto;
+        user-select: auto;
     }
 `
 
@@ -28,6 +29,7 @@ const Reset = styled(XCircle)`
     fill: ${({ theme }) => theme.color_secondary};
     cursor: text;
     pointer-events: none;
+    user-select: none;
 `
 
 const Search = ({ search, setSearch }) => {
