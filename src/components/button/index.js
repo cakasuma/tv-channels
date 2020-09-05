@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const SharedButtonStyle = css`
     border-radius: 6px;
@@ -37,7 +38,6 @@ const SharedButtonStyle = css`
     &:focus,
     &:active {
         outline: none;
-        transform: scale(0.95);
         box-shadow: 0 0 0 3px rgba(235, 21, 140, 0.08);
     }
 `
@@ -61,4 +61,10 @@ export const Button = styled.button`
                 animation: sweep 1s linear alternate infinite, rotates 0.8s linear infinite;
             `
     }}
+`
+
+export const LinkButton = styled(Link)`
+    ${SharedButtonStyle}
+    text-align: center;
+    text-decoration: none;
 `

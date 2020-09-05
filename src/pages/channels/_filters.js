@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Checkbox } from 'components/checkbox'
 import { Text } from 'components/typography'
+import { Button } from 'components/button'
 import { filter_constants } from 'utils/constants'
 
 const ModalContent = styled.article`
@@ -43,35 +44,63 @@ const Grid = styled.div`
     grid-template-columns: repeat(2, 1fr);
 `
 
+const ButtonWrapper = styled.div`
+    display: flex;
+    margin-top: 16px;
+
+    ${Button} {
+        font-size: 14px;
+    }
+`
+
+const MarButton = styled(Button)`
+    margin-right: 8px;
+`
+
 const Filters = ({ filters, setFilters }) => {
+    const [currentFilters, setCurrentFilters] = React.useState(filters)
     const toggleCheck = (name) => {
         // If the name already inside filters, remove it
-        if (filters.includes(name)) {
-            setFilters(filters.filter((filter) => filter !== name))
+        if (currentFilters.includes(name)) {
+            setCurrentFilters(currentFilters.filter((filter) => filter !== name))
         } else {
-            setFilters([...filters, name])
+            setCurrentFilters([...currentFilters, name])
         }
     }
 
     return (
         <ModalContent>
-            {Object.keys(filter_constants).map((type) => (
-                <>
+            {Object.keys(filter_constants).map((type, index) => (
+                <React.Fragment key={index}>
                     <Capitalize as="h5">{type}</Capitalize>
                     <Divider />
                     <Grid>
-                        {filter_constants[type].map((filter_name) => (
-                            <CheckboxGroup onClick={() => toggleCheck(filter_name)}>
+                        {filter_constants[type].map((filter_name, idx) => (
+                            <CheckboxGroup onClick={() => toggleCheck(filter_name)} key={idx}>
                                 <Checkbox
-                                    checked={filters.includes(filter_name)}
+                                    checked={currentFilters.includes(filter_name)}
                                     onChange={() => toggleCheck(filter_name)}
                                 />
                                 <Text>{filter_name}</Text>
                             </CheckboxGroup>
                         ))}
                     </Grid>
-                </>
+                </React.Fragment>
             ))}
+            <Divider />
+            <ButtonWrapper>
+                <MarButton onClick={() => setFilters(currentFilters)} primary>
+                    Apply
+                </MarButton>
+                <Button
+                    onClick={() => {
+                        setCurrentFilters([])
+                    }}
+                    secondary
+                >
+                    Clear filters
+                </Button>
+            </ButtonWrapper>
         </ModalContent>
     )
 }

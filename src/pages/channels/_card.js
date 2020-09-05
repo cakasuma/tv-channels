@@ -2,17 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import { BadgeHdFill } from '@styled-icons/bootstrap'
 import { Text } from 'components/typography'
+import { LinkButton } from 'components/button'
 
 const StyledCard = styled.article`
     box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 16px 0px;
     background: ${({ theme }) => theme.background_tertiary};
-    padding: 10px 16px;
+    padding: 10px 16px 62px;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     border-radius: 6px;
     min-height: 220px;
+    position: relative;
 `
 
 const Img = styled.img`
@@ -68,14 +70,20 @@ const MovieWrapper = styled.div`
 `
 
 const OnWrapper = styled(MovieWrapper)`
-    background: rgba(235, 21, 140, 0.08);
+    background: ${({ theme }) => theme.color_secondary_alpha};
 `
 
 const Contents = styled.div`
     display: contents;
 `
 
-const Card = ({ image, channel_name, channel_number, today_schedule = [], is_hd }) => {
+const CardButton = styled(LinkButton)`
+    position: absolute;
+    bottom: 10px;
+    width: 85%;
+`
+
+const Card = ({ image, channel_id, channel_name, channel_number, today_schedule = [], is_hd }) => {
     return (
         <StyledCard>
             {is_hd && <HdBadge />}
@@ -113,6 +121,9 @@ const Card = ({ image, channel_name, channel_number, today_schedule = [], is_hd 
             ) : (
                 <Text as="h5">No information available</Text>
             )}
+            <CardButton to={`/channel/${channel_id}`} secondary>
+                View details
+            </CardButton>
         </StyledCard>
     )
 }

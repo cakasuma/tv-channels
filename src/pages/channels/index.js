@@ -149,10 +149,11 @@ const Channels = observer(() => {
                         {filtered_channels.map((ch_item, index) => (
                             <Card
                                 key={index}
+                                channel_id={ch_item.id}
                                 channel_name={ch_item.title}
-                                image={ch_item.imageUrl}
                                 channel_number={ch_item.stbNumber}
                                 today_schedule={ch_item.currentSchedule}
+                                image={ch_item.imageUrl}
                                 is_hd={ch_item.isHd}
                             />
                         ))}

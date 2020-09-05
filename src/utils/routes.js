@@ -6,7 +6,7 @@ import NotFound from 'pages/404'
 
 export const Routes = () => (
     <Switch>
-        <Route path="/" children={<Channels />} />
+        <Route exact path="/" children={<Channels />} />
         <Route path="/channel/:channel_id" children={<ChannelDetail />} />
         <Route path="/404" children={<NotFound />} />
         <Redirect to="404" />

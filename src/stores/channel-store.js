@@ -34,18 +34,13 @@ class ChannelStore {
         const current_channels = [...this.channels]
         if (!filters.length) return current_channels
 
-        filters.forEach((filter) => {
-            current_channels.filter((channel) => {
-                return (
-                    channel.category === filter ||
-                    channel.language === filter ||
-                    (channel.isHd && filter === 'HD') ||
-                    (!channel.isHd && filter === 'SD')
-                )
-            })
+        return current_channels.filter((channel) => {
+            return (
+                filters.includes(channel.category) ||
+                filters.includes(channel.language) ||
+                filters.includes(channel.isHd ? 'HD' : 'SD')
+            )
         })
-
-        return current_channels
     })
 
     get has_loaded() {
