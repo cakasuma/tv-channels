@@ -1,19 +1,28 @@
 import { decorate, observable, action, computed } from 'mobx'
+import { computedFn } from 'mobx-utils'
 import { API } from 'backend'
 
 class ChannelStore {
     channels = []
-    is_loading = false
+    is_loading = true
     has_error = false
 
     getChannelData = async () => {
+        const client_channels = window.localStorage.getItem('channels')
+        if (client_channels) {
+            this.channels = JSON.parse(client_channels)
+        }
         // Check if we have cached channel data, don't need to set loading to render loading view
-        if (this.has_loaded) {
-            this.is_loading = true
+        if (this.has_loaded || client_channels) {
+            this.is_loading = false
         }
         try {
             const channel_response = await API.get('/all.json')
             this.channels = channel_response?.data?.response
+            window.localStorage.setItem(
+                'channels',
+                JSON.stringify(channel_response?.data?.response),
+            )
         } catch (err) {
             this.has_error = true
         }
@@ -21,22 +30,23 @@ class ChannelStore {
         this.is_loading = false
     }
 
-    getChannelsByFilters = (filters) => {
+    getChannelsByFilters = computedFn(function getChannelsByFilters(filters) {
         const current_channels = [...this.channels]
+        if (!filters.length) return current_channels
 
         filters.forEach((filter) => {
             current_channels.filter((channel) => {
                 return (
                     channel.category === filter ||
                     channel.language === filter ||
-                    (channel.isHd && filter === 'hd') ||
-                    (!channel.isHd && filter === 'sd')
+                    (channel.isHd && filter === 'HD') ||
+                    (!channel.isHd && filter === 'SD')
                 )
             })
         })
 
         return current_channels
-    }
+    })
 
     get has_loaded() {
         return this.channels?.length > 0

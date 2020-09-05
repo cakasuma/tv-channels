@@ -33,17 +33,14 @@ const StyledCheckbox = styled.div`
         props.checked ? props.theme.color_secondary : props.theme.background_primary};
     border-radius: 3px;
     transition: all 150ms;
+    border: 1px solid ${({ theme }) => theme.color_secondary};
 
     ${HiddenCheckbox}:focus + & {
-        box-shadow: 0 0 0 3px ${({ theme }) => theme.color_secondary};
-    }
-
-    ${Icon} {
-        visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
+        box-shadow: 0 0 0 3px rgba(235, 21, 140, 0.08);
     }
 `
 
-const Checkbox = ({ className, checked, ...props }) => (
+export const Checkbox = ({ className, checked, ...props }) => (
     <CheckboxContainer className={className}>
         <HiddenCheckbox checked={checked} {...props} />
         <StyledCheckbox checked={checked}>
@@ -53,5 +50,3 @@ const Checkbox = ({ className, checked, ...props }) => (
         </StyledCheckbox>
     </CheckboxContainer>
 )
-
-export default Checkbox

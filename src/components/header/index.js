@@ -6,7 +6,7 @@ import { Button } from 'components/button'
 
 const Nav = styled.nav`
     background: ${({ theme }) => theme.background_primary};
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px 0px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 20px 0px;
     color: ${({ theme }) => theme.color_primary};
     padding: 16px 0;
 `

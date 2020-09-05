@@ -3,14 +3,13 @@ import { ThemeProvider } from 'styled-components'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Routes } from 'utils/routes'
 import { Header } from 'components/header'
-import { light_theme, dark_theme, GlobalStyles } from 'themes'
+import { light_theme, dark_theme, GlobalStyles, useThemeHooks } from 'themes'
 
 const App = () => {
-    const [theme, setTheme] = React.useState('light')
+    const [theme, themeToggler, is_component_mounted] = useThemeHooks()
     const current_theme = theme === 'light' ? light_theme : dark_theme
-    const themeToggler = () => {
-        theme === 'light' ? setTheme('dark') : setTheme('light')
-    }
+
+    if (!is_component_mounted) return <div />
     return (
         <Router>
             <ThemeProvider theme={current_theme}>

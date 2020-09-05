@@ -1,7 +1,18 @@
 import React from 'react'
+import styled, { keyframes } from 'styled-components'
+import Popup from 'reactjs-popup'
 import matchSorter from 'match-sorter'
-import { useObserver } from 'mobx-react'
+import { observer } from 'mobx-react'
+import { Filter } from '@styled-icons/bootstrap'
 import { useStores } from 'stores'
+import { Container } from 'components/container'
+import { Text } from 'components/typography'
+import { Button } from 'components/button'
+import { Input } from 'components/input'
+import { filter_constants } from 'utils/constants'
+import Search from './_search'
+import Filters from './_filters'
+import Card from './_card'
 
 const pushToQueryParams = (filters, search) => {
     let current_query = ['?filter=']
@@ -52,7 +63,14 @@ const initializeFilters = () => {
     const url_filters = url_params.get('filter')
 
     if (url_filters) {
-        let filter_arr = url_filters.split(',')
+        let filter_arr = url_filters
+            .split(',')
+            .filter(
+                (item) =>
+                    filter_constants.category?.includes(item) ||
+                    filter_constants.language?.includes(item) ||
+                    filter_constants.resolution?.includes(item),
+            )
         return filter_arr
     }
 
@@ -69,21 +87,21 @@ const initializeSearch = () => {
     return ''
 }
 
-const Channels = () => {
+const Channels = observer(() => {
     const { channel } = useStores()
 
     const filterChannel = (filters, search) => {
-        const filter_positions = channel.getChannelsByFilters(filters)
-        const search_positions = matchSorter(filter_positions, search.trim(), {
-            keys: ['title', 'description', 'category', 'language'],
-            threshold: matchSorter.rankings.CONTAINS,
+        const filter_channels = channel.getChannelsByFilters(filters)
+        const search_channels = matchSorter(filter_channels, search.trim(), {
+            keys: ['title', 'description'],
+            threshold: matchSorter.rankings.WORD_STARTS_WITH,
         })
-        return search_positions
+        return search_channels
     }
 
     const [filters, setFilters] = React.useState(initializeFilters())
     const [search, setSearch] = React.useState(initializeSearch)
-    const [filtered_positions, setFilteredChannel] = React.useState(() =>
+    const [filtered_channels, setFilteredChannel] = React.useState(() =>
         filterChannel(filters, search),
     )
 
@@ -98,19 +116,124 @@ const Channels = () => {
         const filtered = filterChannel(filters, search)
         setFilteredChannel(filtered)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, filters])
+    }, [search, filters, channel.channels])
 
-    return useObserver(() => (
-        <div>
-            <section>Filters</section>
-            <div>divider</div>
-            <div>
-                <section>Search form</section>
-                <div>badges</div>
-                <div>pagination datas</div>
-            </div>
-        </div>
-    ))
-}
+    return (
+        <>
+            <SectionContainer>
+                {/* Search and filter */}
+                <ChannelContainer>
+                    <Text as="h2">Search and filter your favorite TV Channels</Text>
+                    <FormGroup>
+                        <Search search={search} setSearch={setSearch} />
+                        <FilterPopup
+                            trigger={
+                                <FilterButton primary>
+                                    <div>
+                                        <Filter />
+                                    </div>
+                                    <span>Filter</span>
+                                </FilterButton>
+                            }
+                            closeOnDocumentClick
+                            position="bottom center"
+                        >
+                            <Filters filters={filters} setFilters={setFilters} />
+                        </FilterPopup>
+                    </FormGroup>
+                </ChannelContainer>
+            </SectionContainer>
+            <ChannelSectionContainer>
+                <Container>
+                    <MainGrid>
+                        {filtered_channels.map((ch_item, index) => (
+                            <Card
+                                key={index}
+                                channel_name={ch_item.title}
+                                image={ch_item.imageUrl}
+                                channel_number={ch_item.stbNumber}
+                                today_schedule={ch_item.currentSchedule}
+                                is_hd={ch_item.isHd}
+                            />
+                        ))}
+                    </MainGrid>
+                </Container>
+            </ChannelSectionContainer>
+        </>
+    )
+})
+
+const SectionContainer = styled.section`
+    padding: 80px 0;
+    background: ${({ theme }) => theme.background_secondary};
+`
+
+const ChannelSectionContainer = styled(SectionContainer)`
+    background: ${({ theme }) => theme.background_primary};
+`
+
+const ChannelContainer = styled(Container)`
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`
+
+const FormGroup = styled.div`
+    display: flex;
+    margin-top: 32px;
+    width: 80%;
+    justify-content: center;
+
+    ${Input} {
+        margin-right: 16px;
+        width: 100%;
+    }
+`
+
+const FilterButton = styled(Button)`
+    display: flex;
+    border-width: 1px;
+    align-items: center;
+
+    & svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 4px;
+    }
+`
+
+const popupAnimation = keyframes`
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  1% {
+    transform: scale(0.96) translateY(10px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+    box-shadow: 0 0 500px rgba(241, 241, 241, 0);
+  }
+`
+const FilterPopup = styled(Popup)`
+    &-arrow {
+        color: ${({ theme }) => theme.background_primary};
+    }
+    &-content {
+        animation: ${popupAnimation} 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+    }
+`
+
+const MainGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 16px;
+`
 
 export default Channels

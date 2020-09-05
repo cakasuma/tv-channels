@@ -8,6 +8,6 @@ export const GlobalStyles = createGlobalStyle`
         background: ${({ theme }) => theme.background_primary};
         color: ${({ theme }) => theme.color_primary};
         font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif;
-        transition: all 0.50s linear;
+        transition: all 0.25s linear;
     }
 `

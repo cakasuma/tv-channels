@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@styled-icons/bootstrap": "^10.19.0",
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
@@ -10,6 +11,7 @@
         "match-sorter": "^4.2.0",
         "mobx": "^5.15.6",
         "mobx-react": "^6.3.0",
+        "mobx-utils": "^5.6.1",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-router-dom": "^5.2.0",

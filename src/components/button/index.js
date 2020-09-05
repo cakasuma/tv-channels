@@ -13,7 +13,9 @@ const SharedButtonStyle = css`
                 color: ${({ theme }) => theme.color_secondary};
                 background: transparent;
 
-                &:hover {
+                &:hover,
+                &:active,
+                &:focus {
                     background-color: ${({ theme }) => theme.color_secondary};
                     color: ${({ theme }) => theme.color_white};
                 }
@@ -24,7 +26,9 @@ const SharedButtonStyle = css`
                 color: ${({ theme }) => theme.color_secondary};
                 border: none;
 
-                &:hover {
+                &:hover,
+                &:active,
+                &:focus {
                     background: rgba(235, 21, 140, 0.08);
                 }
             `
@@ -34,6 +38,7 @@ const SharedButtonStyle = css`
     &:active {
         outline: none;
         transform: scale(0.95);
+        box-shadow: 0 0 0 3px rgba(235, 21, 140, 0.08);
     }
 `
 
