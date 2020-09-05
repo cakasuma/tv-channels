@@ -94,7 +94,7 @@ const Channels = observer(() => {
     const filterChannel = (filters, search) => {
         const filter_channels = channel.getChannelsByFilters(filters)
         const search_channels = matchSorter(filter_channels, search.trim(), {
-            keys: ['title', 'description'],
+            keys: ['title', 'stbNumber'],
             threshold: matchSorter.rankings.WORD_STARTS_WITH,
         })
         return search_channels
