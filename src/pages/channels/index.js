@@ -34,6 +34,7 @@ const Channels = observer(() => {
             keys: ['title', 'stbNumber'],
             threshold: matchSorter.rankings.WORD_STARTS_WITH,
         })
+        // Because stbNumber return a string, we need to convert that to number first
         const sort_channels =
             sort === 'stbNumber'
                 ? search_channels.sort((a, b) => +a[sort]?.localeCompare(+b[sort]))

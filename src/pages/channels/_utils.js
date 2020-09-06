@@ -1,7 +1,8 @@
 import { filter_constants } from 'utils/constants'
 
+// Updates window URL parameter from search and filters, to persist the current search and filters
 const pushToQueryParams = (filters, search) => {
-    let current_query = ['?filter=']
+    const current_query = ['?filter=']
     if (Array.isArray(filters)) {
         if (filters.length) {
             filters.forEach((query, idx) => {
@@ -12,6 +13,7 @@ const pushToQueryParams = (filters, search) => {
                 }
             })
         } else {
+            // Make sure that only have 1 array (prevent multiple query bug)
             current_query.splice(1, current_query.length)
         }
     }
@@ -50,11 +52,13 @@ export const debouncedUpdateQueryParams = debounce(
 )
 
 export const initializeFilters = () => {
-    var url_params = new URLSearchParams(window.location.search)
+    const url_params = new URLSearchParams(window.location.search)
     const url_filters = url_params.get('filter')
 
     if (url_filters) {
-        let filter_arr = url_filters
+        // parsing filter into array
+        // and make sure that all items are valid (prevent wrong item bug)
+        const filter_arr = url_filters
             .split(',')
             .filter(
                 (item) =>

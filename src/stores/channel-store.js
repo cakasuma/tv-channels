@@ -30,10 +30,12 @@ class ChannelStore {
         this.is_loading = false
     }
 
+    // uses computedFn because there is an arguments to computed function, and to make the returned response memoized
     getChannelsByFilters = computedFn(function getChannelsByFilters(filters) {
         const current_channels = [...this.channels]
         if (!filters.length) return current_channels
 
+        // check every channel is fall within the filter categories
         return current_channels.filter((channel) => {
             return (
                 filters.includes(channel.category) ||

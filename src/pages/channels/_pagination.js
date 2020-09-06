@@ -61,15 +61,20 @@ const MainGrid = styled.div`
 `
 
 const Pagination = ({ children, page_limit }) => {
+    // These items are always updated upon re-render
     const all_records = React.Children.toArray(children)
     const total_records = all_records.length
     const needs_pagination = total_records > page_limit
 
     const [section_selection, setSectionSelection] = React.useState(page_limit)
+    // start index is the last item section - page limit
     const [start_index, setStartIndex] = React.useState(section_selection - page_limit)
 
     const has_next = section_selection < total_records
     const has_previous = section_selection > page_limit
+
+    // check if the item is within page limit, if it is then it will be total records
+    // if not then it will be the current last item selection
     const end_index = needs_pagination ? section_selection : total_records
 
     const current_records = all_records.slice(start_index, end_index)

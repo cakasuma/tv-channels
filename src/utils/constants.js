@@ -1,3 +1,4 @@
+// Freeze to make the object immutable
 export const filter_constants = Object.freeze({
     category: [
         'Movies',
