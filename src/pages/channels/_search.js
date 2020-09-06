@@ -9,8 +9,6 @@ const WithReset = styled(Input)`
     &:active ~ svg {
         opacity: 1;
         cursor: pointer;
-        pointer-events: auto;
-        user-select: auto;
     }
 `
 
@@ -33,8 +31,6 @@ const Reset = styled(XCircle)`
     margin-right: 25px;
     fill: ${({ theme }) => theme.color_secondary};
     cursor: text;
-    pointer-events: none;
-    user-select: none;
 `
 
 const Search = ({ search, setSearch }) => {
