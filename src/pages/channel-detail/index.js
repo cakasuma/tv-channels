@@ -6,6 +6,7 @@ import { LinkText, Text } from 'components/typography'
 import Tabs from 'components/tab'
 import { API } from 'backend'
 import { day_constants } from 'utils/constants'
+import { device } from 'themes/device'
 
 const SectionContainer = styled.section`
     padding: 80px 0;
@@ -87,6 +88,12 @@ const Description = styled(Text)`
     margin-top: 16px;
     margin-bottom: 32px;
     font-style: italic;
+    font-weight: normal;
+    font-size: 14px;
+
+    @media ${device.mobile} {
+        font-size: 16px;
+    }
 `
 
 const Detail = styled.div`
@@ -95,6 +102,10 @@ const Detail = styled.div`
     grid-gap: 24px;
     width: 80%;
     margin: 0 auto;
+`
+
+const Empty = styled(Text)`
+    text-align: center;
 `
 
 const ChannelDetail = () => {
@@ -153,71 +164,87 @@ const ChannelDetail = () => {
             <ScheduleContainer>
                 <Container>
                     <TabsChannel tab_break="560px">
-                        {channel.schedule ? (
+                        {channel.schedule && Object.keys(channel.schedule)?.length ? (
                             Object.keys(channel.schedule).map((schedule, index) => {
                                 const day_num = new Date(schedule).getDay()
                                 const day = day_constants[day_num]
                                 return (
                                     <TabsChannel.Panel key={index} label={day}>
-                                        {channel.schedule[schedule].map((movies, idx) => {
-                                            const lower_boundary_date = new Date(movies.datetime)
-                                            const upper_boundary_date = new Date(movies.datetime)
-                                            const current_date = new Date()
-                                            const duration_array = movies.duration.split(':')
-                                            const hours = +duration_array[0]
-                                            const minutes = +duration_array[1]
-                                            const seconds = +duration_array[2]
-                                            upper_boundary_date.setHours(
-                                                upper_boundary_date.getHours() + hours,
-                                            )
-                                            upper_boundary_date.setMinutes(
-                                                upper_boundary_date.getMinutes() + minutes,
-                                            )
-                                            upper_boundary_date.setSeconds(
-                                                upper_boundary_date.getSeconds() + seconds,
-                                            )
+                                        {channel.schedule[schedule]?.length ? (
+                                            channel.schedule[schedule].map((movies, idx) => {
+                                                const lower_boundary_date = new Date(
+                                                    movies.datetime,
+                                                )
+                                                const upper_boundary_date = new Date(
+                                                    movies.datetime,
+                                                )
+                                                const current_date = new Date()
+                                                const duration_array = movies.duration.split(':')
+                                                const hours = +duration_array[0]
+                                                const minutes = +duration_array[1]
+                                                const seconds = +duration_array[2]
+                                                upper_boundary_date.setHours(
+                                                    upper_boundary_date.getHours() + hours,
+                                                )
+                                                upper_boundary_date.setMinutes(
+                                                    upper_boundary_date.getMinutes() + minutes,
+                                                )
+                                                upper_boundary_date.setSeconds(
+                                                    upper_boundary_date.getSeconds() + seconds,
+                                                )
 
-                                            const lower_boundary_time = lower_boundary_date.getTime()
-                                            const upper_boundary_time = upper_boundary_date.getTime()
-                                            const current_time = current_date.getTime()
+                                                const lower_boundary_time = lower_boundary_date.getTime()
+                                                const upper_boundary_time = upper_boundary_date.getTime()
+                                                const current_time = current_date.getTime()
 
-                                            const is_on_now =
-                                                current_time >= lower_boundary_time &&
-                                                current_time <= upper_boundary_time
+                                                const is_on_now =
+                                                    current_time >= lower_boundary_time &&
+                                                    current_time <= upper_boundary_time
 
-                                            const format_time = lower_boundary_date.toLocaleString(
-                                                'en-US',
-                                                {
-                                                    hour: 'numeric',
-                                                    minute: 'numeric',
-                                                    hour12: true,
-                                                },
-                                            )
-                                            const schedule_time = is_on_now ? 'On now' : format_time
+                                                const format_time = lower_boundary_date.toLocaleString(
+                                                    'en-US',
+                                                    {
+                                                        hour: 'numeric',
+                                                        minute: 'numeric',
+                                                        hour12: true,
+                                                    },
+                                                )
+                                                const schedule_time = is_on_now
+                                                    ? 'On now'
+                                                    : format_time
 
-                                            return (
-                                                <Contents key={idx}>
-                                                    {is_on_now ? (
-                                                        <OnWrapper>
-                                                            <Bold type="s">{schedule_time}</Bold>
-                                                            <Bold type="s">{movies.title}</Bold>
-                                                        </OnWrapper>
-                                                    ) : (
-                                                        <MovieWrapper>
-                                                            <Text type="s">{schedule_time}</Text>
-                                                            <Text type="s">{movies.title}</Text>
-                                                        </MovieWrapper>
-                                                    )}
-                                                </Contents>
-                                            )
-                                        })}
+                                                return (
+                                                    <Contents key={idx}>
+                                                        {is_on_now ? (
+                                                            <OnWrapper>
+                                                                <Bold type="s">
+                                                                    {schedule_time}
+                                                                </Bold>
+                                                                <Bold type="s">{movies.title}</Bold>
+                                                            </OnWrapper>
+                                                        ) : (
+                                                            <MovieWrapper>
+                                                                <Text type="s">
+                                                                    {schedule_time}
+                                                                </Text>
+                                                                <Text type="s">{movies.title}</Text>
+                                                            </MovieWrapper>
+                                                        )}
+                                                    </Contents>
+                                                )
+                                            })
+                                        ) : (
+                                            <Empty label="Schedule" as="h4">
+                                                No schedule available
+                                            </Empty>
+                                        )}
                                     </TabsChannel.Panel>
                                 )
                             })
                         ) : (
-                            <Text label="-" as="h4">
+                            <Empty label="Schedule" as="h3">
                                 No schedule available
-                            </Text>
+                            </Empty>
                         )}
                     </TabsChannel>
                 </Container>

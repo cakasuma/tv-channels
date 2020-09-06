@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { BadgeHdFill } from '@styled-icons/bootstrap'
 import { Text } from 'components/typography'
 import { LinkButton } from 'components/button'
+import { device } from 'themes/device'
 
 const StyledCard = styled.article`
     box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 16px 0px;
@@ -81,6 +82,11 @@ const CardButton = styled(LinkButton)`
     position: absolute;
     bottom: 10px;
     width: 85%;
+    font-size: 14px;
+
+    @media ${device.mobile} {
+        font-size: 16px;
+    }
 `
 
 const Card = ({ image, channel_id, channel_name, channel_number, today_schedule = [], is_hd }) => {

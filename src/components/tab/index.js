@@ -57,7 +57,7 @@ const TabList = styled.div`
         & p {
             white-space: nowrap;
             padding: 12px 0;
-            font-size: 24px;
+            font-size: 14px;
         }
     }
 `
