@@ -10,6 +10,7 @@ import { Text } from 'components/typography'
 import { Button } from 'components/button'
 import { Input } from 'components/input'
 import { filter_constants } from 'utils/constants'
+import { device } from 'themes/device'
 import Search from './_search'
 import Filters from './_filters'
 import Card from './_card'
@@ -130,7 +131,7 @@ const Channels = observer(() => {
             <SectionContainer>
                 {/* Search and filter */}
                 <ChannelContainer>
-                    <Text as="h2">Search and filter your favorite TV Channels</Text>
+                    <ResTitle as="h2">Search and filter your favorite TV Channels</ResTitle>
                     <FormGroup>
                         <Search search={search} setSearch={setSearch} />
                         <FilterPopup
@@ -190,8 +191,12 @@ const Channels = observer(() => {
 })
 
 const SectionContainer = styled.section`
-    padding: 80px 0;
+    padding: 40px 0;
     background: ${({ theme }) => theme.background_secondary};
+
+    @media ${device.tablet} {
+        padding: 80px 0;
+    }
 `
 
 const ChannelSectionContainer = styled(SectionContainer)`
@@ -209,12 +214,21 @@ const ChannelContainer = styled(Container)`
 const FormGroup = styled.div`
     display: flex;
     margin-top: 32px;
-    width: 80%;
+    width: 90%;
     justify-content: center;
+    /* flex-direction: column; */
 
     ${Input} {
         margin-right: 16px;
         width: 100%;
+        font-size: 14px;
+        @media ${device.tablet} {
+            font-size: 16px;
+        }
+    }
+
+    @media ${device.tablet} {
+        /* flex-direction: row; */
     }
 `
 
@@ -222,11 +236,25 @@ const FilterButton = styled(Button)`
     display: flex;
     border-width: 1px;
     align-items: center;
+    padding: 10px 8px;
+    @media ${device.mobile} {
+        padding: 10px 16px;
+        & span {
+            display: inline-block;
+        }
+
+        & svg {
+            margin-right: 4px;
+        }
+    }
 
     & svg {
         width: 20px;
         height: 20px;
-        margin-right: 4px;
+    }
+
+    & span {
+        display: none;
     }
 `
 
@@ -267,6 +295,7 @@ const ToggleContainer = styled.div`
     align-items: center;
     justify-content: center;
     color: ${({ theme }) => theme.color_white};
+    margin-bottom: 16px;
 `
 
 const SToggle = styled(Toggles)`
@@ -277,6 +306,19 @@ const SToggle = styled(Toggles)`
 
 const SText = styled(Text)`
     opacity: ${(props) => (props.selected ? 1 : 0.6)};
+    font-size: 14px;
+
+    @media ${device.mobile} {
+        font-size: 16px;
+    }
+`
+
+const ResTitle = styled(Text)`
+    font-size: 24px;
+
+    @media ${device.mobile} {
+        font-size: 32px;
+    }
 `
 
 export default Channels

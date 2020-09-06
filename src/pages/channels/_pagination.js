@@ -2,6 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { Text } from 'components/typography'
 import { Button } from 'components/button'
+import { device } from 'themes/device'
+
+const ButtonLeft = styled(Button)`
+    margin-right: 16px;
+`
 
 const Flex = styled.div`
     display: flex;
@@ -9,6 +14,30 @@ const Flex = styled.div`
     justify-content: space-between;
     margin-bottom: 32px;
     align-items: center;
+
+    @media ${device.mobile} {
+        ${Button} {
+            font-size: 16px;
+            padding: 10px 16px;
+        }
+        ${ButtonLeft} {
+            margin-right: 16px;
+        }
+        ${Text} {
+            font-size: 14px;
+        }
+    }
+
+    ${Button} {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+    ${ButtonLeft} {
+        margin-right: 8px;
+    }
+    ${Text} {
+        font-size: 12px;
+    }
 `
 
 const BottomFlex = styled(Flex)`
@@ -25,13 +54,9 @@ const TopText = styled(Text)`
     font-size: 14px;
 `
 
-const ButtonLeft = styled(Button)`
-    margin-right: 1.6rem;
-`
-
 const MainGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     grid-gap: 16px;
 `
 

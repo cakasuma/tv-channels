@@ -7,6 +7,7 @@ export const Container = styled.div`
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    max-width: 90%;
 
     @media ${device.mobile} {
         max-width: 540px;

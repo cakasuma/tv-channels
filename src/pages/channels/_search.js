@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Input } from 'components/input'
 import { XCircle } from '@styled-icons/bootstrap'
+import { device } from 'themes/device'
 
 const WithReset = styled(Input)`
     &:focus ~ svg,
@@ -15,8 +16,12 @@ const WithReset = styled(Input)`
 
 const Form = styled.form`
     display: flex;
-    width: 60%;
+    width: 100%;
     align-items: center;
+
+    @media ${device.tablet} {
+        width: 60%;
+    }
 `
 
 const Reset = styled(XCircle)`
@@ -42,7 +47,7 @@ const Search = ({ search, setSearch }) => {
             }}
         >
             <WithReset
-                placeholder="'Press enter to apply search'"
+                placeholder="'Enter to search'"
                 value={input_value}
                 onChange={(e) => setInputValue(e.target.value)}
                 autoFocus

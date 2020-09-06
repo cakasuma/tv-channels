@@ -34,6 +34,12 @@ const Img = styled.img`
 
 const DetailItem = styled.article`
     display: flex;
+    align-items: center;
+
+    p:first-child {
+        margin-right: 8px;
+        color: ${({ theme }) => theme.color_secondary};
+    }
 `
 
 const MovieWrapper = styled.div`
@@ -68,6 +74,29 @@ const TabsChannel = styled(Tabs)`
     margin: 0 auto;
 `
 
+const Center = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 768px;
+    margin: 64px auto 0;
+`
+
+const Description = styled(Text)`
+    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 32px;
+    font-style: italic;
+`
+
+const Detail = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 24px;
+    width: 80%;
+    margin: 0 auto;
+`
+
 const ChannelDetail = () => {
     const { channel_id } = useParams()
     const [channel, setChannel] = React.useState({})
@@ -93,30 +122,32 @@ const ChannelDetail = () => {
                         <LinkText to="/">Channels</LinkText> <span>{`>`}</span>{' '}
                         <Text>{channel.title}</Text>
                     </Breadcrumbs>
-                    <div>
+                    <Center>
                         <Img src={channel.imageUrl} alt={channel.title} />
-                        <Text>{channel.description}</Text>
-                        <DetailItem>
-                            <Text type="s">Category: </Text>
-                            <Text type="s">{channel.category}</Text>
-                        </DetailItem>
-                        <DetailItem>
-                            <Text type="s">Language: </Text>
-                            <Text type="s">{channel.language}</Text>
-                        </DetailItem>
-                        <DetailItem>
-                            <Text type="s">Channel: </Text>
-                            <Text type="s">{channel.stbNumber}</Text>
-                        </DetailItem>
-                        <DetailItem>
-                            <Text type="s">Resolution: </Text>
-                            <Text type="s">{channel.isHd ? 'HD' : 'SD'}</Text>
-                        </DetailItem>
-                        <DetailItem>
-                            <Text type="s">Astro Go exclusive: </Text>
-                            <Text type="s">{channel.isAstroGoExclusive ? 'Yes' : 'No'}</Text>
-                        </DetailItem>
-                    </div>
+                        <Description as="h4">{channel.description}</Description>
+                        <Detail>
+                            <DetailItem>
+                                <Text type="s">Category:</Text>
+                                <Text type="s">{channel.category}</Text>
+                            </DetailItem>
+                            <DetailItem>
+                                <Text type="s">Language: </Text>
+                                <Text type="s">{channel.language}</Text>
+                            </DetailItem>
+                            <DetailItem>
+                                <Text type="s">Channel: </Text>
+                                <Text type="s">{channel.stbNumber}</Text>
+                            </DetailItem>
+                            <DetailItem>
+                                <Text type="s">Resolution: </Text>
+                                <Text type="s">{channel.isHd ? 'HD' : 'SD'}</Text>
+                            </DetailItem>
+                            <DetailItem>
+                                <Text type="s">Astro Go exclusive: </Text>
+                                <Text type="s">{channel.isAstroGoExclusive ? 'Yes' : 'No'}</Text>
+                            </DetailItem>
+                        </Detail>
+                    </Center>
                 </Container>
             </SectionContainer>
             <ScheduleContainer>

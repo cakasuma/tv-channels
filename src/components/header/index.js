@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Container } from 'components/container'
 import { Text } from 'components/typography'
 import { Button } from 'components/button'
+import { device } from 'themes/device'
 
 const Nav = styled.nav`
     background: ${({ theme }) => theme.background_primary};
@@ -16,7 +17,6 @@ const NavContainer = styled(Container)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%;
 `
 
 const SLink = styled(Link)`
@@ -24,16 +24,32 @@ const SLink = styled(Link)`
     color: ${({ theme }) => theme.color_primary};
 `
 
+const ResText = styled(Text)`
+    font-size: 16px;
+
+    @media ${device.mobile} {
+        font-size: 24px;
+    }
+`
+
+const ResButton = styled(Button)`
+    font-size: 14px;
+
+    @media ${device.mobile} {
+        font-size: 16px;
+    }
+`
+
 export const Header = ({ themeToggler }) => {
     return (
         <Nav>
             <NavContainer>
                 <SLink to="/">
-                    <Text as="h3">My Channels</Text>
+                    <ResText as="h3">TV Channels</ResText>
                 </SLink>
-                <Button primary onClick={themeToggler}>
+                <ResButton primary onClick={themeToggler}>
                     Toggle theme
-                </Button>
+                </ResButton>
             </NavContainer>
         </Nav>
     )
