@@ -4,6 +4,7 @@ import { Checkbox } from 'components/checkbox'
 import { Text } from 'components/typography'
 import { Button } from 'components/button'
 import { filter_constants } from 'utils/constants'
+import { device } from 'themes/device'
 
 const ModalContent = styled.article`
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 16px 0px;
@@ -57,6 +58,14 @@ const MarButton = styled(Button)`
     margin-right: 8px;
 `
 
+const ResText = styled(Text)`
+    font-size: 14px;
+
+    @media ${device.mobile} {
+        font-size: 16px;
+    }
+`
+
 const Filters = ({ filters, setFilters }) => {
     const [currentFilters, setCurrentFilters] = React.useState(filters)
     const toggleCheck = (name) => {
@@ -81,7 +90,7 @@ const Filters = ({ filters, setFilters }) => {
                                     checked={currentFilters.includes(filter_name)}
                                     onChange={() => toggleCheck(filter_name)}
                                 />
-                                <Text>{filter_name}</Text>
+                                <ResText>{filter_name}</ResText>
                             </CheckboxGroup>
                         ))}
                     </Grid>

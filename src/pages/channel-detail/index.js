@@ -1,112 +1,26 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { Container } from 'components/container'
 import { LinkText, Text } from 'components/typography'
-import Tabs from 'components/tab'
 import { API } from 'backend'
 import { day_constants } from 'utils/constants'
-import { device } from 'themes/device'
-
-const SectionContainer = styled.section`
-    padding: 80px 0;
-    background: ${({ theme }) => theme.background_secondary};
-`
-
-const ScheduleContainer = styled.section`
-    padding: 80px 0;
-    background: ${({ theme }) => theme.background_primary};
-`
-
-const Breadcrumbs = styled.div`
-    display: flex;
-    align-items: center;
-
-    span {
-        margin-left: 4px;
-        margin-right: 4px;
-    }
-`
-
-const Img = styled.img`
-    width: 132px;
-    height: 100px;
-`
-
-const DetailItem = styled.article`
-    display: flex;
-    align-items: center;
-
-    p:first-child {
-        margin-right: 8px;
-        color: ${({ theme }) => theme.color_secondary};
-    }
-`
-
-const MovieWrapper = styled.div`
-    padding: 4px 8px;
-    border-radius: 6px;
-    display: grid;
-    width: 100%;
-    grid-template-columns: 90px 1fr;
-
-    p:last-child {
-        text-align: end;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-`
-
-const OnWrapper = styled(MovieWrapper)`
-    background: ${({ theme }) => theme.color_secondary_alpha};
-`
-
-const Contents = styled.div`
-    display: contents;
-`
-
-const Bold = styled(Text)`
-    font-weight: bold;
-`
-
-const TabsChannel = styled(Tabs)`
-    max-width: 800px;
-    margin: 0 auto;
-`
-
-const Center = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 768px;
-    margin: 64px auto 0;
-`
-
-const Description = styled(Text)`
-    text-align: center;
-    margin-top: 16px;
-    margin-bottom: 32px;
-    font-style: italic;
-    font-weight: normal;
-    font-size: 14px;
-
-    @media ${device.mobile} {
-        font-size: 16px;
-    }
-`
-
-const Detail = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 24px;
-    width: 80%;
-    margin: 0 auto;
-`
-
-const Empty = styled(Text)`
-    text-align: center;
-`
+import { getFormattedTime } from 'utils/functions'
+import {
+    SectionContainer,
+    ScheduleContainer,
+    Breadcrumbs,
+    Img,
+    DetailItem,
+    MovieWrapper,
+    OnWrapper,
+    Contents,
+    Bold,
+    TabsChannel,
+    Center,
+    Description,
+    Detail,
+    Empty,
+} from './_styles'
 
 const ChannelDetail = () => {
     const { channel_id } = useParams()
@@ -172,13 +86,20 @@ const ChannelDetail = () => {
                                     <TabsChannel.Panel key={index} label={day}>
                                         {channel.schedule[schedule]?.length ? (
                                             channel.schedule[schedule].map((movies, idx) => {
+                                                /*
+                                                    the goal is to determine whether the current time
+                                                    is fall under the current looped movie
+                                                */
+                                                // Lower boundary will be the start time of movie
                                                 const lower_boundary_date = new Date(
                                                     movies.datetime,
                                                 )
+                                                // Upper boundary will be the start time + duration of movie
                                                 const upper_boundary_date = new Date(
                                                     movies.datetime,
                                                 )
                                                 const current_date = new Date()
+
                                                 const duration_array = movies.duration.split(':')
                                                 const hours = +duration_array[0]
                                                 const minutes = +duration_array[1]
@@ -197,17 +118,13 @@ const ChannelDetail = () => {
                                                 const upper_boundary_time = upper_boundary_date.getTime()
                                                 const current_time = current_date.getTime()
 
+                                                // Check if current epoch time is in between or equal to lower and upper boundary time
                                                 const is_on_now =
                                                     current_time >= lower_boundary_time &&
                                                     current_time <= upper_boundary_time
 
-                                                const format_time = lower_boundary_date.toLocaleString(
-                                                    'en-US',
-                                                    {
-                                                        hour: 'numeric',
-                                                        minute: 'numeric',
-                                                        hour12: true,
-                                                    },
+                                                const format_time = getFormattedTime(
+                                                    lower_boundary_date,
                                                 )
                                                 const schedule_time = is_on_now
                                                     ? 'On now'

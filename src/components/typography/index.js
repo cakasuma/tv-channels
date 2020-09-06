@@ -15,6 +15,7 @@ export const Text = styled(({ as = 'p', size = 'm', children, ...props }) =>
         }
     }};
     font-size: ${(props) => {
+        if (props.type === 'xs') return '12px'
         if (props.type === 's') return '14px'
         if (props.type === 'm') return '16px'
         if (props.type === 'l') return '24px'

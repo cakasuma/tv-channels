@@ -15,6 +15,7 @@ import Search from './_search'
 import Filters from './_filters'
 import Card from './_card'
 import Pagination from './_pagination'
+import Badges from './_badges'
 
 const pushToQueryParams = (filters, search) => {
     let current_query = ['?filter=']
@@ -149,6 +150,7 @@ const Channels = observer(() => {
                             <Filters filters={filters} setFilters={setFilters} />
                         </FilterPopup>
                     </FormGroup>
+                    <Badges filters={filters} setFilters={setFilters} />
                 </ChannelContainer>
             </SectionContainer>
             <ChannelSectionContainer>
@@ -214,21 +216,23 @@ const ChannelContainer = styled(Container)`
 const FormGroup = styled.div`
     display: flex;
     margin-top: 32px;
+    margin-bottom: 24px;
     width: 90%;
     justify-content: center;
-    /* flex-direction: column; */
+    flex-direction: column;
 
     ${Input} {
-        margin-right: 16px;
         width: 100%;
         font-size: 14px;
-        @media ${device.tablet} {
+
+        @media ${device.mobile} {
             font-size: 16px;
+            margin-right: 16px;
         }
     }
 
-    @media ${device.tablet} {
-        /* flex-direction: row; */
+    @media ${device.mobile} {
+        flex-direction: row;
     }
 `
 
@@ -237,7 +241,12 @@ const FilterButton = styled(Button)`
     border-width: 1px;
     align-items: center;
     padding: 10px 8px;
+    width: fit-content;
+    align-self: center;
+    margin-top: 16px;
+
     @media ${device.mobile} {
+        margin-top: 0;
         padding: 10px 16px;
         & span {
             display: inline-block;
