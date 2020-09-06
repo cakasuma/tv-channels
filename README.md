@@ -41,3 +41,7 @@ and meanwhile updating with the new data
 3. Why styled components ?
 
 CSS in JS is very easy to debug, because it's isolated to the usage, and you can pass in conditional value inside CSS, therefore to make transition based on conditional javascript is rather easy. it also support Context Provider feature , we can configure that to create Dark and Light theme.
+
+## External code
+
+-   debounce code `/src/pages/channnels/_utils.js:28` `https://davidwalsh.name/javascript-debounce-function`, which is to optimize filter and search engine on the URL parameter, so the filter and search will stays if he refresh the page. we can't immediately await appending the URL parameters because it will cause lags, and will be bad for performance. This was the attempt to optimize immediate search function, but despite that, it will still a bit laggy, so i decided to use onSubmit for it.
